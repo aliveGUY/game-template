@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 
 file(READ ${CMAKE_SOURCE_DIR}/public.env ENV_CONTENTS)
 
-# read env file
+# Read env file
 string(REPLACE "\n" ";" ENV_LINES "${ENV_CONTENTS}")
 foreach(ENV_LINE ${ENV_LINES})
     string(FIND "${ENV_LINE}" "=" EQUAL_POS)
@@ -14,14 +14,27 @@ foreach(ENV_LINE ${ENV_LINES})
         set(ENV{${ENV_KEY}} ${ENV_VALUE})
     endif()
 endforeach()
-# end read env file
+# End read env file
 
-# set env vars
+# Set env vars
 set(PROJECT_NAME $ENV{PROJECT_NAME})
-# end set env vars
+# End set env vars
 
 project(${PROJECT_NAME})
 
-include_directories(${CMAKE_SOURCE_DIR}/git_modules/GuiLite)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
+# Add GLFW before defining the main executable
+add_subdirectory(${CMAKE_SOURCE_DIR}/git_modules/GLFW)
+
+# Find Vulkan and OpenGL
+find_package(Vulkan REQUIRED)
+find_package(OpenGL REQUIRED)
+
+# Create the executable target first
 add_executable(${PROJECT_NAME} main.cpp)
+
+# Link the GLFW library, Vulkan, and OpenGL libraries to the executable
+target_link_libraries(${PROJECT_NAME} glfw ${Vulkan_LIBRARIES} ${OPENGL_LIBRARIES})

@@ -24,12 +24,9 @@ if $build_docker; then
 fi
 
 if $run_docker; then
-    docker run $PROJECT_NAME
-fi
+    xhost +local:docker
+    docker run --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix $PROJECT_NAME xclock
 
-if $refresh_docker; then
-    docker build . -t $PROJECT_NAME --build-arg PROJECT_NAME=$PROJECT_NAME
-    docker run $PROJECT_NAME
 fi
 
 if $build_cpp; then
