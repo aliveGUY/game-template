@@ -25,7 +25,12 @@ fi
 
 if $run_docker; then
     xhost +local:docker
-    docker run --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix $PROJECT_NAME xclock
+    docker run --rm -it \
+        --device /dev/dri \
+        -e DISPLAY=:0 \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        --privileged \
+        $PROJECT_NAME
 
 fi
 
