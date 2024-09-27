@@ -12,7 +12,7 @@ COPY . /usr/src/${PROJECT_NAME}
 
 WORKDIR /usr/src/${PROJECT_NAME}
 
-RUN chmod +x ./lde.sh
-RUN ./lde.sh --build
+RUN cmake -S . -B build
+RUN cmake --build build
 
 CMD ["bash", "./lde.sh", "--run"]

@@ -1,4 +1,6 @@
 #include <iostream>
+#define GUILITE_ON
+#include "GuiLite.h"
 
 int main()
 {

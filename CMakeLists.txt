@@ -22,4 +22,6 @@ set(PROJECT_NAME $ENV{PROJECT_NAME})
 
 project(${PROJECT_NAME})
 
+include_directories(${CMAKE_SOURCE_DIR}/git_modules/GuiLite)
+
 add_executable(${PROJECT_NAME} main.cpp)
