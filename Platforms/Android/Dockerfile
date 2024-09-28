@@ -2,11 +2,17 @@ FROM ubuntu:20.04
 
 RUN apt-get update && apt-get install -y \
   libpulse0 \
-  pulseaudio \ 
   openjdk-17-jdk \
-  libglu1-mesa \
   wget \
-  unzip
+  gradle \
+  libglu1-mesa \
+  unzip \
+  pulseaudio \
+  qemu-kvm \
+  libvirt-daemon-system \
+  bridge-utils \
+  libvirt-clients \
+  sudo
 
 RUN mkdir -p android-sdk/cmdline-tools/latest
 
@@ -28,4 +34,14 @@ RUN yes | sdkmanager --install "build-tools;31.0.0" "platforms;android-31" "syst
 RUN yes | sdkmanager --licenses
 RUN echo "no" | avdmanager create avd -n EmulatorDevice -k "system-images;android-31;google_apis;x86_64"
 
-CMD ["emulator", "-avd", "EmulatorDevice"]
+WORKDIR /app
+
+COPY . .
+
+RUN chmod +x ./gradlew
+
+RUN ./gradlew clean assembleDebug
+
+RUN chmod +x ./entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]
