@@ -1,15 +1,42 @@
 version: "3.8"
 
 services:
-  android:
+  # android-platform:
+  #   build:
+  #     context: Platforms/Android/
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - DISPLAY=${DISPLAY}
+  #   volumes:
+  #     - /tmp/.X11-unix:/tmp/.X11-unix
+  #   devices:
+  #     - /dev/kvm
+  #   tty: true
+  #   stdin_open: true
+
+  # windows-platform:
+  #   build:
+  #     context: Platforms/Windows/
+  #     dockerfile: Dockerfile
+  
+  # linux-platform:
+  #   build:
+  #     context: Platforms/Linux/
+  #     dockerfile: Dockerfile
+
+  graphics-system:
+    image: graphics-system
+    container_name: ${PROJECT_NAME}
     build:
-      context: Platforms/Android/
+      context: .
       dockerfile: Dockerfile
     environment:
-      - DISPLAY=${DISPLAY}
+      - DISPLAY=:0
+      - PROJECT_NAME=${PROJECT_NAME}
+    devices:
+      - /dev/dri
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
-    devices:
-      - /dev/kvm
-    tty: true
+    privileged: true
     stdin_open: true
+    tty: true

@@ -27,8 +27,8 @@ RUN apt-get update && apt-get install -y \
 
 # Install GLFW from source
 RUN git clone https://github.com/glfw/glfw.git
-RUN cmake -S glfw -B build
-RUN cmake --build build --target install
+RUN cmake -S glfw -B glfw_build
+RUN cmake --build glfw_build --target install
 
 # Install shader compiler
 RUN wget https://storage.googleapis.com/shaderc/artifacts/prod/graphics_shader_compiler/shaderc/linux/continuous_clang_release/469/20240923-182119/install.tgz
