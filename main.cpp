@@ -1,53 +1,37 @@
+#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height);
-}
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
 
-int main() {
-    // Initialize GLFW
-    if (!glfwInit()) {
-        return -1;
-    }
+#include <iostream>
 
-    // Create a windowed mode window and its OpenGL context
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Hello World", NULL, NULL);
-    if (!window) {
-        glfwTerminate();
-        return -1;
-    }
+int main()
+{
+    glfwInit();
 
-    // Make the window's context current
-    glfwMakeContextCurrent(window);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    GLFWwindow *window = glfwCreateWindow(800, 600, "Vulkan window", nullptr, nullptr);
 
-    // Set the viewport size
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    uint32_t extensionCount = 0;
+    vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
 
-    // Main loop
-    while (!glfwWindowShouldClose(window)) {
-        // Clear the screen
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+    std::cout << extensionCount << " extensions supported\n";
 
-        // Draw a triangle
-        glBegin(GL_TRIANGLES);
-            glColor3f(1.0f, 0.0f, 0.0f); // Red
-            glVertex2f(-0.5f, -0.5f);
-            glColor3f(0.0f, 1.0f, 0.0f); // Green
-            glVertex2f(0.5f, -0.5f);
-            glColor3f(0.0f, 0.0f, 1.0f); // Blue
-            glVertex2f(0.0f, 0.5f);
-        glEnd();
+    glm::mat4 matrix;
+    glm::vec4 vec;
+    auto test = matrix * vec;
 
-        // Swap front and back buffers
-        glfwSwapBuffers(window);
-
-        // Poll for and process events
+    while (!glfwWindowShouldClose(window))
+    {
         glfwPollEvents();
     }
 
-    // Clean up
     glfwDestroyWindow(window);
+
     glfwTerminate();
+
     return 0;
 }

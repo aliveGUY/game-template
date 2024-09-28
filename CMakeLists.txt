@@ -1,18 +1,52 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.0)
 
-# Set the project name and version
-project(${PROJECT_NAME} VERSION 1.0)
+file(READ ${CMAKE_SOURCE_DIR}/public.env ENV_CONTENTS)
 
-# Use C++17 standard
+# read env file
+string(REPLACE "\n" ";" ENV_LINES "${ENV_CONTENTS}")
+foreach(ENV_LINE ${ENV_LINES})
+    string(FIND "${ENV_LINE}" "=" EQUAL_POS)
+    if(NOT EQUAL_POS EQUAL -1)
+        string(SUBSTRING "${ENV_LINE}" 0 ${EQUAL_POS} ENV_KEY)
+        math(EXPR VALUE_START "${EQUAL_POS} + 1")
+        string(SUBSTRING "${ENV_LINE}" ${VALUE_START} -1 ENV_VALUE)
+
+        set(ENV{${ENV_KEY}} ${ENV_VALUE})
+    endif()
+endforeach()
+# end read env file
+
+# set env vars
+set(PROJECT_NAME $ENV{PROJECT_NAME})
+# end set env vars
+
+project(${PROJECT_NAME} LANGUAGES C CXX)
+
+set(CMAKE_C_COMPILER /usr/bin/clang)
+set(CMAKE_CXX_COMPILER /usr/bin/clang++)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 
-# Add the executable
-add_executable(${PROJECT_NAME} main.cpp)
-
-# Link Vulkan, GLFW, and other necessary libraries
-find_package(Vulkan REQUIRED)
+# Find required packages and libraries
+set(CMAKE_PREFIX_PATH "/usr/local")
 find_package(glfw3 REQUIRED)
-find_package(glm REQUIRED)
+find_package(Vulkan REQUIRED)
+find_package(Threads REQUIRED) # For pthread
+find_package(X11 REQUIRED)      # For X11
 
-target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan glfw glm dl pthread X11 Xxf86vm Xrandr Xi)
+# Add executable for the project
+add_executable(${PROJECT_NAME} ./main.cpp)
+
+# Link required libraries to the executable
+target_link_libraries(${PROJECT_NAME}
+    glfw
+    Vulkan::Vulkan
+    ${CMAKE_DL_LIBS}
+    ${CMAKE_THREAD_LIBS_INIT}
+    X11
+    Xxf86vm
+    Xrandr
+    Xi
+)
