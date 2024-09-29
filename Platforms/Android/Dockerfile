@@ -12,7 +12,17 @@ RUN apt-get update && apt-get install -y \
   libvirt-daemon-system \
   bridge-utils \
   libvirt-clients \
-  sudo
+  sudo \
+  libgl1-mesa-glx \
+  libgl1-mesa-dri \
+  libxcb-xinerama0 \
+  libxcb1 \
+  libxcb-glx0 \
+  libxcb-shm0 \
+  libxcb-shape0 \
+  libx11-xcb1 \
+  libxcb-cursor0
+
 
 RUN mkdir -p android-sdk/cmdline-tools/latest
 

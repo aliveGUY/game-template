@@ -1,42 +1,42 @@
 version: "3.8"
 
 services:
-  # android-platform:
-  #   build:
-  #     context: Platforms/Android/
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - DISPLAY=${DISPLAY}
-  #   volumes:
-  #     - /tmp/.X11-unix:/tmp/.X11-unix
-  #   devices:
-  #     - /dev/kvm
-  #   tty: true
-  #   stdin_open: true
+  android-platform:
+    build:
+      context: Platforms/Android/
+      dockerfile: Dockerfile
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    devices:
+      - /dev/kvm
+    tty: true
+    stdin_open: true
 
-  # windows-platform:
+  # windows-platform: # TODO
   #   build:
   #     context: Platforms/Windows/
   #     dockerfile: Dockerfile
   
-  # linux-platform:
+  # linux-platform: # TODO
   #   build:
   #     context: Platforms/Linux/
   #     dockerfile: Dockerfile
 
-  graphics-system:
-    image: graphics-system
-    container_name: ${PROJECT_NAME}
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      - DISPLAY=:0
-      - PROJECT_NAME=${PROJECT_NAME}
-    devices:
-      - /dev/dri
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix
-    privileged: true
-    stdin_open: true
-    tty: true
+  # graphics-system:
+  #   image: graphics-system
+  #   container_name: ${PROJECT_NAME}
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - DISPLAY=:0
+  #     - PROJECT_NAME=${PROJECT_NAME}
+  #   devices:
+  #     - /dev/dri
+  #   volumes:
+  #     - /tmp/.X11-unix:/tmp/.X11-unix
+  #   privileged: true
+  #   stdin_open: true
+  #   tty: true

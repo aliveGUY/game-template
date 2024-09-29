@@ -6,14 +6,13 @@
 <hr/>
 <br/>
 
-Build
+Before running the containers, you need to allow the application to access your machine by using the command: `xhost +`.
 
-```sh
-./lde --build-docker
+In the `docker-compose.yml` file, you’ll find several platform options, though most are commented out with only one active. You can choose any platform for development, but it’s recommended to select only one at a time.
+
+
+
+### Start
 ```
-
-Run
-
-```sh
-./lde --run-docker
+docker-compose up --build
 ```
