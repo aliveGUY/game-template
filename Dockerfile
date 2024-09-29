@@ -3,6 +3,7 @@ FROM nvidia/cuda:12.6.1-cudnn-runtime-ubuntu24.04
 # Install dependencies
 RUN apt-get update && apt-get install -y \
   vulkan-tools \
+  vulkan-validationlayers \
   vulkan-utility-libraries-dev \
   spirv-tools \
   wayland-protocols \
@@ -22,8 +23,8 @@ RUN apt-get update && apt-get install -y \
   cmake \
   wget \
   pkg-config \
-  git \
-  tree
+  git && \
+  rm -rf /var/lib/apt/lists/*
 
 # Install GLFW from source
 RUN git clone https://github.com/glfw/glfw.git
@@ -41,7 +42,10 @@ ENV PROJECT_NAME=${PROJECT_NAME}
 COPY . /${PROJECT_NAME}
 WORKDIR /${PROJECT_NAME}
 
+RUN glslc shader.vert -o vert.spv
+RUN glslc shader.frag -o frag.spv
+
 RUN cmake -S . -B build
 RUN cmake --build build
 
-CMD ["bash", "./lde.sh", "--run"]
+CMD ./build/$PROJECT_NAME

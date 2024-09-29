@@ -14,5 +14,5 @@ In the `docker-compose.yml` file, you’ll find several platform options, though
 
 ### Start
 ```
-docker-compose up --build
+docker-compose --env-file public.env up --build --remove-orphans
 ```
